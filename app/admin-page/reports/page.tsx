@@ -97,6 +97,8 @@ export default function ReportsPage() {
   dateFormat="dd/MM/yyyy"
 />
 
+
+
         <div>
           <label className="block mb-1">Method</label>
           <select
