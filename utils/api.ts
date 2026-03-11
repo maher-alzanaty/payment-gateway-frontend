@@ -4,7 +4,7 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "production"
       ? "https://my-production-backend.com"
-      : "http://localhost:5000");
+      : "https://payments-webservice.onrender.com");
 
   if (!baseUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
