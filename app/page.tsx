@@ -13,37 +13,38 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+ const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-const res = await apiFetch("/admins/login", {
-  method: "POST",
-  body: JSON.stringify({ email, password }),
-});
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Login failed");
-        setLoading(false);
-        return;
+  try {
+    const res = await fetch(
+      "https://payment-backend-app.onrender.com/admins/login", // <-- full backend URL
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // <-- crucial for cookies
       }
+    );
 
-      // localStorage.setItem("token", data.token);
-      // localStorage.setItem(
-      //   "admin",
-      //   JSON.stringify({ id: data.id, name: data.name, email: data.email })
-      // );
+    const data = await res.json();
 
-      router.push("/admin-page/orders");
-    } catch (err) {
-      console.error(err);
-      setError("Server error");
+    if (!res.ok) {
+      setError(data.error || "Login failed");
+      setLoading(false);
+      return;
     }
-    setLoading(false);
-  };
+
+    // Now the cookie should be stored in the browser automatically
+    router.push("/admin-page/orders");
+  } catch (err) {
+    console.error(err);
+    setError("Server error");
+  }
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-4 text-gray-700">
