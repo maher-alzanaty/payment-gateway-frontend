@@ -5,6 +5,9 @@ import ProofModal from "@/components/ProofModal";
 import { saveAs } from "file-saver"; // For CSV download
 import { apiFetch } from "@/utils/api";
 
+import { useRouter } from "next/navigation";
+
+
 
 
 type Method = { id: string; name: string; };
@@ -27,6 +30,7 @@ export default function OrdersPage() {
   const [methodFilter, setMethodFilter] = useState("all");
   const [methods, setMethods] = useState<Method[]>([]);
   const [proof, setProof] = useState<string | null>(null);
+  
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,6 +42,35 @@ export default function OrdersPage() {
 
   // Sort
   const [sortAsc, setSortAsc] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false); // ✅ check login
+   const router = useRouter();
+
+const [authorized, setAuthorized] = useState(false);
+const [loadingAuth, setLoadingAuth] = useState(true);
+
+
+
+
+
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const res = await fetch(
+          "https://payment-backend-app.onrender.com/admins/me",
+          { credentials: "include" } // crucial to send cookie
+        );
+        if (!res.ok) {
+          router.push("/"); // redirect if not logged in
+          return;
+        }
+        setIsAdmin(true);
+      } catch (err) {
+        router.push("/");
+      }
+    };
+    checkAdmin();
+  }, [router]);
 
   // ================= Fetch payments =================
  const fetchPayments = async () => {

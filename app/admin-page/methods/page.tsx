@@ -2,6 +2,7 @@
 
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { apiFetch } from "@/utils/api"; // <-- import apiFetch
+import { useRouter } from "next/navigation";
 
 type Method = {
   id: string;
@@ -17,6 +18,35 @@ export default function MethodsPage() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editMethod, setEditMethod] = useState<Method | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false); // ✅ check login
+     const router = useRouter();
+  
+  const [authorized, setAuthorized] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  
+  
+  
+  
+  
+  
+    useEffect(() => {
+      const checkAdmin = async () => {
+        try {
+          const res = await fetch(
+            "https://payment-backend-app.onrender.com/admins/me",
+            { credentials: "include" } // crucial to send cookie
+          );
+          if (!res.ok) {
+            router.push("/"); // redirect if not logged in
+            return;
+          }
+          setIsAdmin(true);
+        } catch (err) {
+          router.push("/");
+        }
+      };
+      checkAdmin();
+    }, [router]);
 
   const getLogoUrl = (logo?: string) =>
     logo ? `${process.env.NEXT_PUBLIC_API_URL}${logo}` : "";

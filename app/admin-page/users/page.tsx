@@ -2,6 +2,7 @@
 
 import { useEffect, useState, FormEvent } from "react";
 import { apiFetch } from "@/utils/api"; // <-- use apiFetch
+import { useRouter } from "next/navigation";
 
 type Admin = {
   id: string;
@@ -19,6 +20,35 @@ export default function AdminsPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false); // ✅ check login
+     const router = useRouter();
+  
+  const [authorized, setAuthorized] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  
+  
+  
+  
+  
+  
+    useEffect(() => {
+      const checkAdmin = async () => {
+        try {
+          const res = await fetch(
+            "https://payment-backend-app.onrender.com/admins/me",
+            { credentials: "include" } // crucial to send cookie
+          );
+          if (!res.ok) {
+            router.push("/"); // redirect if not logged in
+            return;
+          }
+          setIsAdmin(true);
+        } catch (err) {
+          router.push("/");
+        }
+      };
+      checkAdmin();
+    }, [router]);
 
   // ================= Fetch Admins =================
   const fetchAdmins = async () => {

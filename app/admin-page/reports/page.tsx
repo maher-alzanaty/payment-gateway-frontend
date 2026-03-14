@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   LineChart,
@@ -24,6 +25,35 @@ export default function ReportsPage() {
   const [userFilter, setUserFilter] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false); // ✅ check login
+     const router = useRouter();
+  
+  const [authorized, setAuthorized] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  
+  
+  
+  
+  
+  
+    useEffect(() => {
+      const checkAdmin = async () => {
+        try {
+          const res = await fetch(
+            "https://payment-backend-app.onrender.com/admins/me",
+            { credentials: "include" } // crucial to send cookie
+          );
+          if (!res.ok) {
+            router.push("/"); // redirect if not logged in
+            return;
+          }
+          setIsAdmin(true);
+        } catch (err) {
+          router.push("/");
+        }
+      };
+      checkAdmin();
+    }, [router]);
 
   // ================= Fetch payments & methods =================
   useEffect(() => {
