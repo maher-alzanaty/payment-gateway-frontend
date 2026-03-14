@@ -5,8 +5,11 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
   //   (process.env.NODE_ENV === "production"
   //     ? "https://payment-backend-app.onrender.com"
   //     : "http://localhost:5000");
-  const baseUrl= process.env.NEXT_PUBLIC_API_URL || 
-                  "https://payment-backend-app.onrender.com";
+  // Use full backend URL
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL || // set in Vercel environment variables
+    "https://payment-backend-app.onrender.com";
+
 
 
   if (!baseUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
