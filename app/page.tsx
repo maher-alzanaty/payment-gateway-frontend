@@ -40,6 +40,7 @@ console.log("email + pass",email,"  ",password);
 
     // Now the cookie should be stored in the browser automatically
     router.push("/admin-page/orders");
+    
   } catch (err) {
     console.error(err);
     setError("Server error");
